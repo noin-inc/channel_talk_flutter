@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ChannelTalk {
@@ -11,16 +10,16 @@ class ChannelTalk {
     return version;
   }
 
-  static Future<bool> boot({
-    @required String pluginKey,
-    @required String memberHash,
-    String memberId,
-    String email,
-    String name,
-    String mobileNumber,
-    bool trackDefaultEvent,
-    bool hidePopup,
-    String language,
+  static Future<bool?> boot({
+    required String pluginKey,
+    required String memberHash,
+    String? memberId,
+    String? email,
+    String? name,
+    String? mobileNumber,
+    bool? trackDefaultEvent,
+    bool? hidePopup,
+    String? language,
   }) {
     Map<String, dynamic> config = {
       'pluginKey': pluginKey,
@@ -49,38 +48,38 @@ class ChannelTalk {
       config['language'] = language;
     }
 
-    return _channel.invokeMethod('boot', config);
+    return _channel.invokeMethod<bool>('boot', config);
   }
 
-  static Future<bool> sleep() {
-    return _channel.invokeMethod('sleep');
+  static Future<bool?> sleep() {
+    return _channel.invokeMethod<bool>('sleep');
   }
 
-  static Future<bool> shutdown() {
-    return _channel.invokeMethod('shutdown');
+  static Future<bool?> shutdown() {
+    return _channel.invokeMethod<bool>('shutdown');
   }
 
-  static Future<bool> showChannelButton() {
-    return _channel.invokeMethod('showChannelButton');
+  static Future<bool?> showChannelButton() {
+    return _channel.invokeMethod<bool>('showChannelButton');
   }
 
-  static Future<bool> hideChannelButton() {
-    return _channel.invokeMethod('hideChannelButton');
+  static Future<bool?> hideChannelButton() {
+    return _channel.invokeMethod<bool>('hideChannelButton');
   }
 
-  static Future<bool> showMessenger() {
-    return _channel.invokeMethod('showMessenger');
+  static Future<bool?> showMessenger() {
+    return _channel.invokeMethod<bool>('showMessenger');
   }
 
-  static Future<bool> hideMessenger() {
-    return _channel.invokeMethod('hideMessenger');
+  static Future<bool?> hideMessenger() {
+    return _channel.invokeMethod<bool>('hideMessenger');
   }
 
-  static Future<bool> openChat({
-    String chatId,
-    String message,
+  static Future<bool?> openChat({
+    required String chatId,
+    required String message,
   }) {
-    return _channel.invokeMethod(
+    return _channel.invokeMethod<bool>(
       'openChat',
       {
         'chatId': chatId,
@@ -89,9 +88,9 @@ class ChannelTalk {
     );
   }
 
-  static Future<bool> track({
-    @required String eventName,
-    Map<String, dynamic> properties,
+  static Future<bool?> track({
+    required String eventName,
+    Map<String, dynamic>? properties,
   }) {
     Map<String, dynamic> data = {
       'eventName': eventName,
@@ -101,22 +100,22 @@ class ChannelTalk {
       data['properties'] = properties;
     }
 
-    return _channel.invokeMethod(
+    return _channel.invokeMethod<bool>(
       'track',
       data,
     );
   }
 
-  static Future<bool> updateUser({
-    String name,
-    String mobileNumber,
-    String email,
-    String avatarUrl,
-    Map<String, dynamic> customAttributes,
-    String language,
-    List<String> tags,
+  static Future<bool?> updateUser({
+    String? name,
+    String? mobileNumber,
+    String? email,
+    String? avatarUrl,
+    Map<String, dynamic>? customAttributes,
+    String? language,
+    List<String>? tags,
   }) {
-    return _channel.invokeMethod('updateUser', {
+    return _channel.invokeMethod<bool>('updateUser', {
       'name': name,
       'mobileNumber': mobileNumber,
       'email': email,
@@ -127,65 +126,67 @@ class ChannelTalk {
     });
   }
 
-  static Future<bool> initPushToken({
-    @required String deviceToken,
+  static Future<bool?> initPushToken({
+    required String deviceToken,
   }) {
-    return _channel.invokeMethod('initPushToken', {
+    return _channel.invokeMethod<bool>('initPushToken', {
       'deviceToken': deviceToken,
     });
   }
 
-  static Future<bool> isChannelPushNotification({
-    @required Map<String, dynamic> content,
+  static Future<bool?> isChannelPushNotification({
+    required Map<String, dynamic> content,
   }) {
-    return _channel.invokeMethod('isChannelPushNotification', {
+    return _channel.invokeMethod<bool>('isChannelPushNotification', {
       'content': content,
     });
   }
 
-  static Future<bool> receivePushNotification({
-    @required Map<String, dynamic> content,
+  static Future<bool?> receivePushNotification({
+    required Map<String, dynamic> content,
   }) {
     return _channel.invokeMethod('receivePushNotification', {
       'content': content,
     });
   }
 
-  static Future<bool> storePushNotification({
-    @required Map<String, dynamic> content,
+  static Future<bool?> storePushNotification({
+    required Map<String, dynamic> content,
   }) {
-    return _channel.invokeMethod('storePushNotification', {
+    return _channel.invokeMethod<bool>('storePushNotification', {
       'content': content,
     });
   }
 
-  static Future<bool> hasStoredPushNotification() {
-    return _channel.invokeMethod('hasStoredPushNotification');
+  static Future<bool?> hasStoredPushNotification() {
+    return _channel.invokeMethod<bool>('hasStoredPushNotification');
   }
 
-  static Future<bool> openStoredPushNotification() {
-    return _channel.invokeMethod('openStoredPushNotification');
+  static Future<bool?> openStoredPushNotification() {
+    return _channel.invokeMethod<bool>('openStoredPushNotification');
   }
 
-  static Future<bool> isBooted() {
-    return _channel.invokeMethod('isBooted');
+  static Future<bool?> isBooted() {
+    return _channel.invokeMethod<bool>('isBooted');
   }
 
-  static Future<bool> setDebugMode({
-    @required bool flag,
+  static Future<bool?> setDebugMode({
+    required bool flag,
   }) {
-    return _channel.invokeMethod('setDebugMode', {
+    return _channel.invokeMethod<bool>('setDebugMode', {
       'flag': flag,
     });
   }
 
-  static Future<bool> setPage({@required page}) {
-    return _channel.invokeMethod('setPage', {
+  static Future<bool?> setPage({
+    required page,
+  }) {
+    return _channel.invokeMethod<bool>('setPage', {
       'page': page,
     });
   }
 
-  static Future<bool> resetPage() {
-    return _channel.invokeMethod('resetPage');
+  static Future<bool?> resetPage() {
+    return _channel.invokeMethod<bool>('resetPage');
   }
 }
