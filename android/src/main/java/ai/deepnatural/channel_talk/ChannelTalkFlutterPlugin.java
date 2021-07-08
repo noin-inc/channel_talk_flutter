@@ -13,6 +13,8 @@ import com.zoyi.channel.plugin.android.open.callback.BootCallback;
 import com.zoyi.channel.plugin.android.open.config.BootConfig;
 import com.zoyi.channel.plugin.android.open.enumerate.BootStatus;
 import com.zoyi.channel.plugin.android.open.enumerate.ChannelButtonPosition;
+import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener;
+import com.zoyi.channel.plugin.android.open.model.PopupData;
 import com.zoyi.channel.plugin.android.open.model.Profile;
 import com.zoyi.channel.plugin.android.open.model.User;
 import com.zoyi.channel.plugin.android.open.model.UserData;
@@ -37,7 +39,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 
 /** ChannelTalkFlutterPlugin */
-public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
+public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware, ChannelPluginListener {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -111,13 +113,55 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
   }
 
   @Override
+  public void onShowMessenger() {
+
+  }
+
+  @Override
+  public void onHideMessenger() {
+
+  }
+
+  @Override
+  public void onChatCreated(String s) {
+
+  }
+
+  @Override
+  public void onBadgeChanged(int i) {
+    channel.invokeMethod("onBadgeChanged", i);
+  }
+
+  @Override
+  public void onProfileChanged(String s, @Nullable Object o) {
+
+  }
+
+  @Override
+  public boolean onUrlClicked(String s) {
+    return false;
+  }
+
+  @Override
+  public boolean onPushNotificationClicked(String s) {
+    return false;
+  }
+
+  @Override
+  public void onPopupDataReceived(PopupData popupData) {
+
+  }
+
+  @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     channel.setMethodCallHandler(null);
   }
 
   @Override
   public void onAttachedToActivity(ActivityPluginBinding activityPluginBinding) {
-      activity = activityPluginBinding.getActivity();
+    activity = activityPluginBinding.getActivity();
+
+    ChannelIO.setListener(this);
 
       // if (ChannelIO.hasStoredPushNotification(activity)) {
       //   Handler delayHandler = new Handler();

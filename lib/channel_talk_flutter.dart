@@ -2,8 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+typedef OnBadgeChanged = Function(int badge);
+
 class ChannelTalk {
   static const MethodChannel _channel = MethodChannel('channel_talk');
+
+  static OnBadgeChanged? _onBadgeChanged;
 
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
@@ -21,6 +25,15 @@ class ChannelTalk {
     bool? hidePopup,
     String? language,
   }) {
+    // initializing callbacks from native
+    _channel.setMethodCallHandler((methodCall) async {
+      if (methodCall.method == "onBadgeChanged") {
+        var badge = methodCall.arguments;
+        _onBadgeChanged?.call(badge);
+      }
+      return true;
+    });
+
     Map<String, dynamic> config = {
       'pluginKey': pluginKey,
       'memberHash': memberHash,
@@ -188,5 +201,13 @@ class ChannelTalk {
 
   static Future<bool?> resetPage() {
     return _channel.invokeMethod<bool>('resetPage');
+  }
+
+  static setOnBadgeChanged(OnBadgeChanged onBadgeChanged) {
+    _onBadgeChanged = onBadgeChanged;
+  }
+
+  static clearOnBadgeChanged() {
+    _onBadgeChanged = null;
   }
 }
