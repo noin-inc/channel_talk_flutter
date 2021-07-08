@@ -6,12 +6,17 @@ public func application(_ application: UIApplication, didRegisterForRemoteNotifi
     ChannelIO.initialize(application)
 }
 
-public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin {
+public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPluginDelegate {
+  var flutterChannel: FlutterMethodChannel?
+
   public static func register(with registrar: FlutterPluginRegistrar) {
     let channel = FlutterMethodChannel(name: "channel_talk", binaryMessenger: registrar.messenger())
     let instance = SwiftChannelTalkFlutterPlugin()
+    instance.flutterChannel = channel;
+    ChannelIO.delegate = instance;
+
     registrar.addMethodCallDelegate(instance, channel: channel)
-    registrar.addApplicationDelegate(instance) 
+    registrar.addApplicationDelegate(instance)
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -59,6 +64,10 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin {
       default:
         result(FlutterMethodNotImplemented)
     }
+  }
+
+  public func onBadgeChanged(count: Int) {
+    self.flutterChannel?.invokeMethod( "onBadgeChanged", arguments: count )
   }
 
   private func boot(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
