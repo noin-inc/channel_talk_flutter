@@ -62,6 +62,10 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
       ChannelIO.initialize((Application) context);
     } catch (Exception e) {
     }
+
+    // set listener
+    ChannelIO.setListener(this);
+
   }
 
   @Override
@@ -160,8 +164,6 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
   @Override
   public void onAttachedToActivity(ActivityPluginBinding activityPluginBinding) {
     activity = activityPluginBinding.getActivity();
-
-    ChannelIO.setListener(this);
 
       // if (ChannelIO.hasStoredPushNotification(activity)) {
       //   Handler delayHandler = new Handler();
