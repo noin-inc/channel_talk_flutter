@@ -127,11 +127,21 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
     ChannelIO.boot(with: bootConfig) { (completion, user) in
       if completion == .success, let _ = user {
         // Success
-        result(true)
+        let userEntry:[String:Any] = [
+          "id": user?.id,
+          "memberId": user?.memberId,
+          "name": user?.name,
+          "avatarUrl": user?.avatarUrl,
+          "alert": user?.alert,
+          "profile": user?.profile,
+          "unsubscribed": user?.unsubscribed,
+          "tags": user?.tags,
+          "language": user?.language
+        ]
+        result(userEntry)
       } else {
         // Fail
-        result(false)
-
+        result([:])
       }
     }
   }
