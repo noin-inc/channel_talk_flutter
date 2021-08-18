@@ -1,8 +1,10 @@
+library channel_talk_flutter;
+
 import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-import 'model/channel_talk_user.dart';
+part 'model/channel_talk_user.dart';
 
 typedef OnBadgeChanged = Function(int badge);
 

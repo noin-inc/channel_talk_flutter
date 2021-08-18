@@ -1,3 +1,5 @@
+part of channel_talk_flutter;
+
 class ChannelTalkUser {
   String? id;
   String? memberId;
