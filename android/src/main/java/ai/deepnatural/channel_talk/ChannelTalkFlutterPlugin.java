@@ -21,10 +21,7 @@ import com.zoyi.channel.plugin.android.open.model.UserData;
 import com.zoyi.channel.plugin.android.open.option.ChannelButtonOption;
 import com.zoyi.channel.plugin.android.open.option.Language;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -193,7 +190,6 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
     // Clean up references.
   }
 
-
   public void boot(@NonNull MethodCall call, @NonNull final Result result) {
     String pluginKey = call.argument("pluginKey");
     if (pluginKey == null || pluginKey.isEmpty()) {
@@ -243,13 +239,26 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
       @Override
       public void onComplete(BootStatus bootStatus, @Nullable User user) {
         if (bootStatus == BootStatus.SUCCESS && user != null) {
-          result.success(true);
+          // convert to Map
+          Map<String,Object> userEntry = new LinkedHashMap<>();
+          userEntry.put("id", user.getId());
+          userEntry.put("memberId", user.getMemberId());
+          userEntry.put("name", user.getName());
+          userEntry.put("avatarUrl", user.getAvatarUrl());
+          userEntry.put("alert", user.getAlert());
+          userEntry.put("profile", user.getProfile());
+          userEntry.put("tags", user.getTags());
+          userEntry.put("language", user.getLanguage());
+
+          result.success(userEntry);
         } else {
           result.error("ERROR", "Execution failed(boot)", null);
         }
       }
     });
   }
+
+
 
   public void sleep(@NonNull MethodCall call, @NonNull final Result result) {
     ChannelIO.sleep();

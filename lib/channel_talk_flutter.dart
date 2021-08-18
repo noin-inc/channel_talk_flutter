@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:channel_talk_flutter/model/ChannelTalkUser.dart';
 import 'package:flutter/services.dart';
 
 typedef OnBadgeChanged = Function(int badge);
@@ -14,7 +15,7 @@ class ChannelTalk {
     return version;
   }
 
-  static Future<bool?> boot({
+  static Future<ChannelTalkUser?> boot({
     required String pluginKey,
     required String memberHash,
     String? memberId,
@@ -24,7 +25,7 @@ class ChannelTalk {
     bool? trackDefaultEvent,
     bool? hidePopup,
     String? language,
-  }) {
+  }) async {
     // initializing callbacks from native
     _channel.setMethodCallHandler((methodCall) async {
       if (methodCall.method == "onBadgeChanged") {
@@ -61,7 +62,9 @@ class ChannelTalk {
       config['language'] = language;
     }
 
-    return _channel.invokeMethod<bool>('boot', config);
+    var userEntry = await _channel.invokeMethod<Map<Object?, Object?>?>('boot', config);
+
+    return ChannelTalkUser.fromNative(userEntry);
   }
 
   static Future<bool?> sleep() {
