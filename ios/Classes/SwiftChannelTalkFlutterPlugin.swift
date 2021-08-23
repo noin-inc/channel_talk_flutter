@@ -71,7 +71,13 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
   }
 
   public func onPopupDataReceived(event: PopupData) {
-      self.flutterChannel?.invokeMethod( "onPopupDataReceived", arguments: event )
+      let popupData:[String:String?] = [
+         "chatId": event.chatId,
+         "message": event.message,
+         "name": event.name,
+         "avatarUrl": event.avatarUrl
+      ]
+      self.flutterChannel?.invokeMethod( "onPopupDataReceived", arguments: popupData )
   }
 
   private func boot(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
@@ -131,7 +137,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
     ChannelIO.boot(with: bootConfig) { (completion, user) in
       if completion == .success, let _ = user {
         // Success
-        let userEntry:[String:Any] = [
+        let userEntry:[String:Any?] = [
           "id": user?.id,
           "memberId": user?.memberId,
           "name": user?.name,
@@ -145,7 +151,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
         result(userEntry)
       } else {
         // Fail
-        result([:])
+        result(FlutterError(code: "bootCompletionError", message: "boot failed", details: nil))
       }
     }
   }
