@@ -70,8 +70,12 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
     self.flutterChannel?.invokeMethod( "onBadgeChanged", arguments: count )
   }
 
+  public func onPopupDataReceived(event: PopupData) {
+      self.flutterChannel?.invokeMethod( "onPopupDataReceived", arguments: event )
+  }
+
   private func boot(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
-    guard let argMaps = call.arguments as? Dictionary<String, Any>, 
+    guard let argMaps = call.arguments as? Dictionary<String, Any>,
       let pluginKey = argMaps["pluginKey"] as? String,
       let memberHash = argMaps["memberHash"] as? String else {
       result(FlutterError(code: call.method, message: "Missing argument", details: nil))
@@ -88,7 +92,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
     if let mobileNumber = argMaps["mobileNumber"] as? String {
       profile.set(mobileNumber: mobileNumber)
     }
-    
+
     let buttonOption = ChannelButtonOption.init(
       position: .left,
       xMargin: 16,
@@ -110,7 +114,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
         enumLanguage = LanguageOption.japanese
       default:
         enumLanguage = LanguageOption.device
-        
+
     }
 
     let bootConfig = BootConfig.init(
@@ -195,7 +199,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
       result(FlutterError(code: call.method, message: "Missing argument", details: nil))
       return
     }
-    
+
     let properties = argMaps["properties"] as? Dictionary<String, Any>
 
     ChannelIO.track(eventName: eventName, eventProperty: properties)
@@ -224,7 +228,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
     }
     if let avatarUrl = argMaps["avatarUrl"] {
       profile["avatarUrl"] = avatarUrl
-    }        
+    }
     if let customAttributes = argMaps["customAttributes"] as? Dictionary<String, Any> {
         for (key, value) in customAttributes {
             profile[key] = value
@@ -242,7 +246,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
         enumLanguage = LanguageOption.japanese
       default:
         enumLanguage = LanguageOption.device
-        
+
     }
     let tags = argMaps["tags"] as? [String]
 
@@ -260,7 +264,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
         result(FlutterError(code: call.method, message: error.localizedDescription, details: nil))
       }
     }
-    
+
   }
 
   private func initPushToken(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
@@ -269,7 +273,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
       result(FlutterError(code: call.method, message: "Missing argument", details: nil))
       return
     }
-    
+
     ChannelIO.initPushToken(tokenString: deviceToken)
     result(true)
   }
@@ -280,7 +284,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
       result(FlutterError(code: call.method, message: "Missing argument", details: nil))
       return
     }
-    
+
     let res: Bool = ChannelIO.isChannelPushNotification(content)
     result(Bool(res))
   }
@@ -291,7 +295,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
       result(FlutterError(code: call.method, message: "Missing argument", details: nil))
       return
     }
-    
+
     ChannelIO.receivePushNotification(content)
     result(true)
   }
@@ -302,7 +306,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
       result(FlutterError(code: call.method, message: "Missing argument", details: nil))
       return
     }
-    
+
     ChannelIO.storePushNotification(content)
     result(true)
   }
@@ -327,7 +331,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
       result(FlutterError(code: call.method, message: "Missing argument", details: nil))
       return
     }
-    
+
     ChannelIO.setDebugMode(with: flag)
     result(true)
   }
@@ -338,7 +342,7 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
       result(FlutterError(code: call.method, message: "Missing argument", details: nil))
       return
     }
-    
+
     ChannelIO.setPage(page)
     result(true)
   }

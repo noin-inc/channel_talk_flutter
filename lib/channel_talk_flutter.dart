@@ -4,14 +4,18 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+part 'model/channel_talk_popup_data.dart';
 part 'model/channel_talk_user.dart';
 
 typedef OnBadgeChanged = Function(int badge);
+typedef OnPopupDataReceived = Function(ChannelTalkPopupData popupData);
 
 class ChannelTalk {
   static const MethodChannel _channel = MethodChannel('channel_talk');
 
   static OnBadgeChanged? _onBadgeChanged;
+
+  static OnPopupDataReceived? _onPopupDataReceived;
 
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
@@ -31,9 +35,17 @@ class ChannelTalk {
   }) async {
     // initializing callbacks from native
     _channel.setMethodCallHandler((methodCall) async {
-      if (methodCall.method == "onBadgeChanged") {
-        var badge = methodCall.arguments;
-        _onBadgeChanged?.call(badge);
+      switch (methodCall.method) {
+        case "onBadgeChanged":
+          var badge = methodCall.arguments;
+          _onBadgeChanged?.call(badge);
+          break;
+
+        case "onPopupDataReceived":
+          var popupData = methodCall.arguments;
+          var channelTalkPopupData = ChannelTalkPopupData.fromNative(popupData);
+          _onPopupDataReceived?.call(channelTalkPopupData);
+          break;
       }
       return true;
     });
@@ -215,5 +227,13 @@ class ChannelTalk {
 
   static clearOnBadgeChanged() {
     _onBadgeChanged = null;
+  }
+
+  static setOnPopupDataReceived(OnPopupDataReceived value) {
+    _onPopupDataReceived = value;
+  }
+
+  static clearOnPopupDataReceived() {
+    _onPopupDataReceived = null;
   }
 }
