@@ -24,11 +24,28 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
 android {
     compileSdkVersion 29
 
     lintOptions {
         disable 'InvalidPackage'
+    }
+
+    dependencies {
+        implementation 'io.channel:plugin-android:9.0.3'
+        // If you already set FCM in your project, skip this dependency.
+        implementation 'io.channel:plugin-android-fcm:9.0.3'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     defaultConfig {

@@ -1,6 +1,12 @@
 group 'ai.deepnatural.channel_talk'
 version '1.0'
 
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
 buildscript {
     repositories {
         google()
@@ -27,13 +33,15 @@ android {
     defaultConfig {
         minSdkVersion 24
     }
+
     lintOptions {
         disable 'InvalidPackage'
     }
 
     dependencies {
         implementation 'io.channel:plugin-android:9.0.3'
-        implementation "com.google.firebase:firebase-messaging:20.1.0"
+        // If you already set FCM in your project, skip this dependency.
+        implementation 'io.channel:plugin-android-fcm:9.0.3'
     }
 
     compileOptions {

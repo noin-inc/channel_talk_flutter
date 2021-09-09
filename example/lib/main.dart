@@ -660,6 +660,21 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: Text('resetPage'),
               ),
+              RaisedButton(
+                onPressed: () async {
+                  try {
+                    await ChannelTalk.setOnUrlClicked((url) {
+                      showMessageToast('Url clicked: $url');
+                    });
+                    showMessageToast('setOnUrlClicked');
+                  } on PlatformException catch (error) {
+                    showMessageToast('PlatformException: ${error.message}');
+                  } catch (err) {
+                    showMessageToast(err.message);
+                  }
+                },
+                child: Text('setOnUrlClicked'),
+              ),
             ],
           ),
         ),

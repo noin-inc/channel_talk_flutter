@@ -9,6 +9,7 @@ part 'model/channel_talk_user.dart';
 
 typedef OnBadgeChanged = Function(int badge);
 typedef OnPopupDataReceived = Function(ChannelTalkPopupData popupData);
+typedef OnUrlClicked = Function(String url);
 
 class ChannelTalk {
   static const MethodChannel _channel = MethodChannel('channel_talk');
@@ -16,6 +17,8 @@ class ChannelTalk {
   static OnBadgeChanged? _onBadgeChanged;
 
   static OnPopupDataReceived? _onPopupDataReceived;
+
+  static OnUrlClicked? _onUrlClicked;
 
   static Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
@@ -45,6 +48,11 @@ class ChannelTalk {
           var popupData = methodCall.arguments;
           var channelTalkPopupData = ChannelTalkPopupData.fromNative(popupData);
           _onPopupDataReceived?.call(channelTalkPopupData);
+          break;
+
+        case "onUrlClicked":
+          var url = methodCall.arguments;
+          _onUrlClicked?.call(url);
           break;
       }
       return true;
@@ -235,5 +243,13 @@ class ChannelTalk {
 
   static clearOnPopupDataReceived() {
     _onPopupDataReceived = null;
+  }
+
+  static setOnUrlClicked(OnUrlClicked value) {
+    _onUrlClicked = value;
+  }
+
+  static clearOnUrlClicked() {
+    _onUrlClicked = null;
   }
 }

@@ -62,65 +62,83 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull final Result result) {
-        if (call.method.equals("boot")) {
-            boot(call, result);
-        } else if (call.method.equals("sleep")) {
-            sleep(call, result);
-        } else if (call.method.equals("shutdown")) {
-            shutdown(call, result);
-        } else if (call.method.equals("showChannelButton")) {
-            showChannelButton(call, result);
-        } else if (call.method.equals("hideChannelButton")) {
-            hideChannelButton(call, result);
-        } else if (call.method.equals("showMessenger")) {
-            showMessenger(call, result);
-        } else if (call.method.equals("hideMessenger")) {
-            hideMessenger(call, result);
-        } else if (call.method.equals("openChat")) {
-            openChat(call, result);
-        } else if (call.method.equals("track")) {
-            track(call, result);
-        } else if (call.method.equals("updateUser")) {
-            updateUser(call, result);
-        } else if (call.method.equals("initPushToken")) {
-            initPushToken(call, result);
-        } else if (call.method.equals("isChannelPushNotification")) {
-            isChannelPushNotification(call, result);
-        } else if (call.method.equals("receivePushNotification")) {
-            receivePushNotification(call, result);
-        } else if (call.method.equals("storePushNotification")) {
-            result.error("UNAVAILABLE", "There is no API in Android", null);
-        } else if (call.method.equals("hasStoredPushNotification")) {
-            hasStoredPushNotification(call, result);
-        } else if (call.method.equals("openStoredPushNotification")) {
-            openStoredPushNotification(call, result);
-        } else if (call.method.equals("isBooted")) {
-            isBooted(call, result);
-        } else if (call.method.equals("setDebugMode")) {
-            setDebugMode(call, result);
-        } else if (call.method.equals("setPage")) {
-            setPage(call, result);
-        } else if (call.method.equals("resetPage")) {
-            resetPage(call, result);
-
-        } else {
-            result.notImplemented();
+        switch (call.method) {
+            case "boot":
+                boot(call, result);
+                break;
+            case "sleep":
+                sleep(call, result);
+                break;
+            case "shutdown":
+                shutdown(call, result);
+                break;
+            case "showChannelButton":
+                showChannelButton(call, result);
+                break;
+            case "hideChannelButton":
+                hideChannelButton(call, result);
+                break;
+            case "showMessenger":
+                showMessenger(call, result);
+                break;
+            case "hideMessenger":
+                hideMessenger(call, result);
+                break;
+            case "openChat":
+                openChat(call, result);
+                break;
+            case "track":
+                track(call, result);
+                break;
+            case "updateUser":
+                updateUser(call, result);
+                break;
+            case "initPushToken":
+                initPushToken(call, result);
+                break;
+            case "isChannelPushNotification":
+                isChannelPushNotification(call, result);
+                break;
+            case "receivePushNotification":
+                receivePushNotification(call, result);
+                break;
+            case "storePushNotification":
+                result.error("UNAVAILABLE", "There is no API in Android", null);
+                break;
+            case "hasStoredPushNotification":
+                hasStoredPushNotification(call, result);
+                break;
+            case "openStoredPushNotification":
+                openStoredPushNotification(call, result);
+                break;
+            case "isBooted":
+                isBooted(call, result);
+                break;
+            case "setDebugMode":
+                setDebugMode(call, result);
+                break;
+            case "setPage":
+                setPage(call, result);
+                break;
+            case "resetPage":
+                resetPage(call, result);
+                break;
+            default:
+                result.notImplemented();
+                break;
         }
     }
 
     @Override
     public void onShowMessenger() {
-
     }
 
     @Override
     public void onHideMessenger() {
-
     }
 
     @Override
     public void onChatCreated(String s) {
-
     }
 
     @Override
@@ -130,11 +148,11 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
 
     @Override
     public void onProfileChanged(String s, @Nullable Object o) {
-
     }
 
     @Override
-    public boolean onUrlClicked(String s) {
+    public boolean onUrlClicked(String url) {
+        channel.invokeMethod("onUrlClicked", url );
         return false;
     }
 
