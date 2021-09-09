@@ -152,8 +152,8 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
 
     @Override
     public boolean onUrlClicked(String url) {
-        channel.invokeMethod("onUrlClicked", url );
-        return false;
+        channel.invokeMethod("onUrlClicked", url );  // it should handle url on the flutter app
+        return true;
     }
 
     @Override
