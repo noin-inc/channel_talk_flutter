@@ -357,4 +357,10 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
     ChannelIO.resetPage()
     result(true)
   }
+
+  public func onUrlClicked(url: URL) -> Bool {
+     self.flutterChannel?.invokeMethod( "onUrlClicked", arguments: url.absoluteString )
+     return true;
+  }
+
 }
