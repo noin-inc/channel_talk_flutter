@@ -36,28 +36,6 @@ class ChannelTalk {
     bool? hidePopup,
     String? language,
   }) async {
-    // initializing callbacks from native
-    _channel.setMethodCallHandler((methodCall) async {
-      switch (methodCall.method) {
-        case "onBadgeChanged":
-          var badge = methodCall.arguments;
-          _onBadgeChanged?.call(badge);
-          break;
-
-        case "onPopupDataReceived":
-          var popupData = methodCall.arguments;
-          var channelTalkPopupData = ChannelTalkPopupData.fromNative(popupData);
-          _onPopupDataReceived?.call(channelTalkPopupData);
-          break;
-
-        case "onUrlClicked":
-          var url = methodCall.arguments;
-          _onUrlClicked?.call(url);
-          break;
-      }
-      return true;
-    });
-
     Map<String, dynamic> config = {
       'pluginKey': pluginKey,
       'memberHash': memberHash,
@@ -87,7 +65,34 @@ class ChannelTalk {
 
     var userEntry = await _channel.invokeMethod<Map<Object?, Object?>?>('boot', config);
 
+    // initializing callbacks from native
+    _channel.setMethodCallHandler(ChannelTalk.methodCall);
+
     return ChannelTalkUser.fromNative(userEntry);
+  }
+
+  static Future<dynamic> methodCall(MethodCall methodCall) async {
+    switch (methodCall.method) {
+      case "onBadgeChanged":
+        var badge = methodCall.arguments;
+        _onBadgeChanged?.call(badge);
+        break;
+
+      case "onPopupDataReceived":
+        var popupData = methodCall.arguments;
+        var channelTalkPopupData = ChannelTalkPopupData.fromNative(popupData);
+        _onPopupDataReceived?.call(channelTalkPopupData);
+        break;
+
+      case "onUrlClicked":
+        var url = methodCall.arguments;
+        _onUrlClicked?.call(url);
+        break;
+
+      default:
+        throw MissingPluginException('Not implemented');
+    }
+    return true;
   }
 
   static Future<bool?> sleep() {

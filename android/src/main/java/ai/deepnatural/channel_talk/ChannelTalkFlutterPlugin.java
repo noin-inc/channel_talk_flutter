@@ -17,9 +17,11 @@ import com.zoyi.channel.plugin.android.open.model.User;
 import com.zoyi.channel.plugin.android.open.model.UserData;
 import com.zoyi.channel.plugin.android.open.option.ChannelButtonOption;
 import com.zoyi.channel.plugin.android.open.option.Language;
+import io.flutter.Log;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -37,34 +39,32 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private MethodChannel channel;
-    private static Context context;
+    private BinaryMessenger binaryMessenger;
+    private Context context;
     private Activity activity;
-
-    public static void registerWith(Application application) {
-    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "channel_talk");
-        channel.setMethodCallHandler(this);
-
         context = flutterPluginBinding.getApplicationContext();
+        binaryMessenger = flutterPluginBinding.getBinaryMessenger();
 
-        try {
-            ChannelIO.initialize((Application) context);
-        } catch (Exception e) {
-        }
-
-        // set listener
-        ChannelIO.setListener(this);
-
+        channel = new MethodChannel(binaryMessenger, "channel_talk");
+        channel.setMethodCallHandler(this);
     }
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull final Result result) {
         switch (call.method) {
             case "boot":
-                boot(call, result);
+                try {
+                    ChannelIO.initialize((Application) context);
+                    ChannelIO.setListener(this);
+                } catch (Exception e) {
+                    Log.e("CHANNEL_TALK", e.toString());
+                    result.error("CHANNEL_TALK", "ChnnelIO initialization error : "+e, null);
+                } finally {
+                    boot(call, result);
+                }
                 break;
             case "sleep":
                 sleep(call, result);
@@ -152,7 +152,9 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
 
     @Override
     public boolean onUrlClicked(String url) {
-        channel.invokeMethod("onUrlClicked", url );  // it should handle url on the flutter app
+        Log.i("CHANNEL_TALK", "onUrlClicked : "+url);
+
+        channel.invokeMethod("onUrlClicked", url);  // it should handle url on the flutter app
         return true;
     }
 
@@ -168,7 +170,6 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
         popupDataEntry.put("avatarUrl", popupData.getAvatarUrl());
         popupDataEntry.put("name", popupData.getName());
         popupDataEntry.put("message", popupData.getMessage());
-
         channel.invokeMethod("onPopupDataReceived", popupDataEntry);
     }
 
@@ -191,6 +192,7 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
     @Override
     public void onReattachedToActivityForConfigChanges(ActivityPluginBinding activityPluginBinding) {
         // after a configuration change.
+        activity = activityPluginBinding.getActivity();
     }
 
     @Override
