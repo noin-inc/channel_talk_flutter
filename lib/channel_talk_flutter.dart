@@ -20,8 +20,8 @@ class ChannelTalk {
 
   static OnUrlClicked? _onUrlClicked;
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
+  static Future<String?> get platformVersion async {
+    final String? version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
 
@@ -120,8 +120,8 @@ class ChannelTalk {
   }
 
   static Future<bool?> openChat({
-    required String chatId,
-    required String message,
+    String? chatId,
+    String? message,
   }) {
     return _channel.invokeMethod<bool>(
       'openChat',
