@@ -120,31 +120,6 @@ class ChannelTalk {
   }
 
   static Future<bool?> openChat({
-    required String chatId,
-    required String message,
-  }
-
-  static Future<bool?> shutdown() {
-    return _channel.invokeMethod('shutdown');
-  }
-
-  static Future<bool?> showChannelButton() {
-    return _channel.invokeMethod('showChannelButton');
-  }
-
-  static Future<bool?> hideChannelButton() {
-    return _channel.invokeMethod('hideChannelButton');
-  }
-
-  static Future<bool?> showMessenger() {
-    return _channel.invokeMethod('showMessenger');
-  }
-
-  static Future<bool?> hideMessenger() {
-    return _channel.invokeMethod('hideMessenger');
-  }
-
-  static Future<bool?> openChat({
     String? chatId,
     String? message,
   }) {
