@@ -144,7 +144,8 @@ public class SwiftChannelTalkFlutterPlugin: NSObject, FlutterPlugin, ChannelPlug
           "avatarUrl": user?.avatarUrl,
           "alert": user?.alert,
           "profile": user?.profile,
-          "unsubscribed": user?.unsubscribed,
+          "unsubscribeEmail": user?.unsubscribeEmail,
+          "unsubscribeTexting": user?.unsubscribeTexting,
           "tags": user?.tags,
           "language": user?.language
         ]
