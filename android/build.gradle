@@ -32,6 +32,12 @@ android {
 
     defaultConfig {
         minSdkVersion 24
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath = false
+            }
+        }
     }
 
     lintOptions {
@@ -39,9 +45,10 @@ android {
     }
 
     dependencies {
-        implementation 'io.channel:plugin-android:9.0.3'
+        implementation 'io.channel:plugin-android:10.0.1'
         // If you already set FCM in your project, skip this dependency.
         implementation 'io.channel:plugin-android-fcm:9.0.3'
+        implementation "com.google.firebase:firebase-messaging:20.1.0"
     }
 
     compileOptions {

@@ -7,7 +7,8 @@ class ChannelTalkUser {
   String? avatarUrl;
   int? alert;
   Map<Object?, Object?>? profile;
-  bool? unsubscribed;
+  bool? unsubscribeEmail;
+  bool? unsubscribeTexting;
   List<Object?>? tags;
   String? language;
 
@@ -20,7 +21,8 @@ class ChannelTalkUser {
       user.avatarUrl = userEntry['avatarUrl'] as String?;
       user.alert = userEntry['alert'] as int?;
       user.profile = userEntry['profile'] as Map<Object?, Object?>?;
-      user.unsubscribed = userEntry['unsubscribed'] as bool?;
+      user.unsubscribeEmail = userEntry['unsubscribeEmail'] as bool?;
+      user.unsubscribeTexting = userEntry['unsubscribeTexting'] as bool?;
       user.tags = userEntry['tags'] as List<Object?>?;
       user.language = userEntry['language'] as String?;
     }
