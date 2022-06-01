@@ -146,8 +146,12 @@ public class ChannelTalkFlutterPlugin implements FlutterPlugin, MethodCallHandle
         channel.invokeMethod("onBadgeChanged", i);
     }
 
+//    @Override
+//    public void onProfileChanged(String s, @Nullable Object o) {
+//    }
+
     @Override
-    public void onProfileChanged(String s, @Nullable Object o) {
+    public void onFollowUpChanged(Map<String,String> m) {
     }
 
     @Override
